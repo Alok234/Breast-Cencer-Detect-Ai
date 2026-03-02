@@ -1,156 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Breast Cancer Detection AI</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            width: 100%;
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        h1 { text-align: center; margin-bottom: 20px; }
-        .upload-btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        #fileName { margin: 10px 0; font-size: 0.9em; color: #333; }
-        #preview { width: 100%; max-height: 300px; margin-bottom: 15px; border-radius: 8px; display: none; }
-        .analyze-btn {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-        .analyze-btn:disabled { background: #ccc; cursor: not-allowed; }
-        .result { display: none; padding: 20px; border-radius: 8px; text-align: center; margin-top: 10px; }
-        .result.show { display: block; }
-        .result.normal { background: #d4edda; color: #155724; border: 2px solid #28a745; }
-        .result.abnormal { background: #f8d7da; color: #721c24; border: 2px solid #f5c6cb; }
-        .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 10px;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .error { display: none; background: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; margin-top: 10px; border-left: 4px solid #f5c6cb; }
-        .error.show { display: block; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Breast Cancer Detection AI</title>
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+.container {
+    max-width: 600px;
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+h1 { text-align: center; margin-bottom: 20px; }
+.upload-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 12px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    margin-bottom: 10px;
+}
+#fileName { margin: 10px 0; font-size: 0.9em; color: #333; }
+#preview { width: 100%; max-height: 300px; margin-bottom: 15px; border-radius: 8px; display: none; }
+.analyze-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+.analyze-btn:disabled { background: #ccc; cursor: not-allowed; }
+.result { display: none; padding: 20px; border-radius: 8px; text-align: center; margin-top: 10px; }
+.result.show { display: block; }
+.result.normal { background: #d4edda; color: #155724; border: 2px solid #28a745; }
+.result.abnormal { background: #f8d7da; color: #721c24; border: 2px solid #f5c6cb; }
+.spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.error { display: none; background: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; margin-top: 10px; border-left: 4px solid #f5c6cb; }
+.error.show { display: block; }
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>🏥 Breast Cancer Detection AI</h1>
+<div class="container">
+    <h1>🏥 Breast Cancer Detection AI</h1>
 
-        <input type="file" id="fileInput" accept="image/*" style="display:none;">
-        <label for="fileInput" class="upload-btn">📁 Choose Image</label>
-        <div id="fileName"></div>
-        <img id="preview" alt="Image Preview">
+    <input type="file" id="fileInput" accept="image/*" style="display:none;">
+    <label for="fileInput" class="upload-btn">📁 Choose Image</label>
+    <div id="fileName"></div>
+    <img id="preview" alt="Image Preview">
 
-        <button class="analyze-btn" onclick="analyze()" disabled>🔍 Analyze Image</button>
+    <button class="analyze-btn" onclick="analyze()" disabled>🔍 Analyze Image</button>
 
-        <div id="result" class="result"></div>
-        <div id="error" class="error"></div>
-    </div>
+    <div id="result" class="result"></div>
+    <div id="error" class="error"></div>
+</div>
 
-    <script>
-        const API_URL = "https://breast-cencer-detection-ai-2.onrender.com"; // <-- Update this
-        let selectedFile = null;
+<script>
+const API_URL = "https://breast-cencer-detection-ai-2.onrender.com/predict"; // <-- matches backend
+let selectedFile = null;
 
-        const fileInput = document.getElementById("fileInput");
-        const analyzeBtn = document.querySelector(".analyze-btn");
-        const preview = document.getElementById("preview");
-        const fileNameDiv = document.getElementById("fileName");
-        const resultDiv = document.getElementById("result");
-        const errorDiv = document.getElementById("error");
+const fileInput = document.getElementById("fileInput");
+const analyzeBtn = document.querySelector(".analyze-btn");
+const preview = document.getElementById("preview");
+const fileNameDiv = document.getElementById("fileName");
+const resultDiv = document.getElementById("result");
+const errorDiv = document.getElementById("error");
 
-        fileInput.addEventListener("change", (e) => {
-            selectedFile = e.target.files[0];
-            if (selectedFile) {
-                fileNameDiv.textContent = `📄 ${selectedFile.name}`;
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    preview.src = event.target.result;
-                    preview.style.display = "block";
-                };
-                reader.readAsDataURL(selectedFile);
-                analyzeBtn.disabled = false;
-                resultDiv.className = "result";
-                resultDiv.innerHTML = "";
-                errorDiv.classList.remove("show");
-            }
-        });
+fileInput.addEventListener("change", (e) => {
+    selectedFile = e.target.files[0];
+    if (selectedFile) {
+        fileNameDiv.textContent = `📄 ${selectedFile.name}`;
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            preview.src = event.target.result;
+            preview.style.display = "block";
+        };
+        reader.readAsDataURL(selectedFile);
+        analyzeBtn.disabled = false;
+        resultDiv.className = "result";
+        resultDiv.innerHTML = "";
+        errorDiv.classList.remove("show");
+    }
+});
 
-        async function analyze() {
-            if (!selectedFile) return;
+async function analyze() {
+    if (!selectedFile) return;
 
-            analyzeBtn.disabled = true;
-            resultDiv.className = "result show";
-            resultDiv.innerHTML = `<div class="spinner"></div>Analyzing...`;
-            errorDiv.classList.remove("show");
+    analyzeBtn.disabled = true;
+    resultDiv.className = "result show";
+    resultDiv.innerHTML = `<div class="spinner"></div>Analyzing...`;
+    errorDiv.classList.remove("show");
 
-            const formData = new FormData();
-            formData.append("image", selectedFile);
+    const formData = new FormData();
+    formData.append("image", selectedFile);
 
-            try {
-                const response = await fetch(`${API_URL}/api/predict`, { method: "POST", body: formData });
-                const data = await response.json();
-
-                if (response.ok) {
-                    const cls = data.prediction === "Abnormal" ? "abnormal" : "normal";
-                    const icon = data.prediction === "Abnormal" ? "🔴" : "🟢";
-                    const confidence = (data.confidence * 100).toFixed(1);
-
-                    resultDiv.className = `result show ${cls}`;
-                    resultDiv.innerHTML = `
-                        <h3>${icon} ${data.prediction}</h3>
-                        <p>Confidence: ${confidence}%</p>
-                        <p style="font-size:0.9em; color:#555">${data.disclaimer}</p>
-                    `;
-                } else {
-                    showError(data.error || "Analysis failed");
-                }
-            } catch (err) {
-                showError(err.message);
-            }
-
-            analyzeBtn.disabled = false;
+    try {
+        const response = await fetch(API_URL, { method: "POST", body: formData });
+        
+        // check if response is JSON
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            throw new Error("Backend did not return JSON! Check your URL or server.");
         }
 
-        function showError(msg) {
-            errorDiv.textContent = `❌ ${msg}`;
-            errorDiv.classList.add("show");
-            resultDiv.className = "result";
-            resultDiv.innerHTML = "";
-        }
-    </script>
+        const data = await response.json();
+
+        const cls = data.result === "Abnormal" ? "abnormal" : "normal";
+        const icon = data.result === "Abnormal" ? "🔴" : "🟢";
+
+        resultDiv.className = `result show ${cls}`;
+        resultDiv.innerHTML = `<h3>${icon} ${data.result}</h3>`;
+    } catch (err) {
+        errorDiv.textContent = `❌ ${err.message}`;
+        errorDiv.classList.add("show");
+        resultDiv.className = "result";
+        resultDiv.innerHTML = "";
+    }
+
+    analyzeBtn.disabled = false;
+}
+</script>
 </body>
 </html>
